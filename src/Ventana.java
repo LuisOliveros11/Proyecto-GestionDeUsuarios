@@ -12,7 +12,9 @@ import javax.swing.*;
 public class Ventana extends JFrame {
 	private String actual = "login";
 	private String anterior = "login";
+	private String userName=" ";
 	private JPanel gran_panel = null;
+	private JMenuBar jmb;
 
 	//CONSTRUCTOR
 	public Ventana() {
@@ -39,6 +41,9 @@ public class Ventana extends JFrame {
 		}
 		if (actual.equals("dash")) {
 			gran_panel = dash();
+		}
+		if (actual.equals("miCuenta")) {
+			gran_panel = miCuenta();
 		}
 		this.add(gran_panel);
 		this.revalidate();
@@ -89,15 +94,15 @@ public class Ventana extends JFrame {
 		iniciar_Sesion.setForeground(Color.white);
 		iniciar_Sesion.setLocation(270,420);
 		iniciar_Sesion.setOpaque(true);
-		iniciar_Sesion.setBackground(Color.blue);
+		iniciar_Sesion.setBackground(Color.decode("#080691"));
 		login.add(iniciar_Sesion);
 		
 		JButton cancelar = new JButton("Cancelar");
 		cancelar.setSize(150,40);
 		cancelar.setForeground(Color.white);
-		cancelar.setLocation(70,420);
+		cancelar.setLocation(62,420);
 		cancelar.setOpaque(true);
-		cancelar.setBackground(Color.red);
+		cancelar.setBackground(Color.decode("#D80000"));
 		login.add(cancelar);
 		
 		iniciar_Sesion.addActionListener(new ActionListener() {
@@ -117,13 +122,14 @@ public class Ventana extends JFrame {
 						if(datos[2].equals(email)) {
 							if(datos[3].equals(password)) {
 								acceso = true;
+								userName = datos[0];
 							}
 						}
 						//Leer la siguiente linea
 						line = reader.readLine();
 					}
 					if(acceso) {
-						JOptionPane.showMessageDialog(null,"Bienvenido " + datos[0]);
+						JOptionPane.showMessageDialog(null,"Bienvenido " + userName);
 						anterior = actual;
 						actual = "dash";
 						route();
@@ -135,8 +141,6 @@ public class Ventana extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				
 			}
 		});
 		
@@ -160,7 +164,14 @@ public class Ventana extends JFrame {
 		dash.setBackground(Color.black);
 		dash.setLayout(null);
 		
-		JMenuBar jmb = new JMenuBar();
+		JLabel bienvenido = new JLabel("Hola " + userName);
+		bienvenido.setFont(new Font("Comic Sans",Font.BOLD,23));
+		bienvenido.setSize(300,40);
+		bienvenido.setForeground(Color.white);
+		bienvenido.setLocation(200,100);
+		dash.add(bienvenido);
+		
+		jmb = new JMenuBar();
 		this.setJMenuBar(jmb);
 		
 		JMenu jm1 = new JMenu("Cuenta");
@@ -182,8 +193,16 @@ public class Ventana extends JFrame {
 		JMenuItem jmi5 = new JMenuItem("¿Cómo crear usuarios?");
 		jm3.add(jmi5);
 		
-		JLabel name = new JLabel();
 		
+		jmi1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				anterior = actual;
+				actual = "miCuenta";
+				route();
+			}
+		});
 		
 		jmi2.addActionListener(new ActionListener() {
 			@Override
@@ -196,5 +215,89 @@ public class Ventana extends JFrame {
 		});
 		
 		return dash;
+	}
+
+	public JPanel miCuenta() {
+		JPanel miCuenta = new JPanel();
+		miCuenta.setVisible(true);
+		miCuenta.setSize(500,600);
+		miCuenta.setBackground(Color.black);
+		miCuenta.setLayout(null);
+		
+		JLabel cuenta = new JLabel("Mi cuenta personal");
+		cuenta.setFont(new Font("Comic Sans",Font.BOLD,23));
+		cuenta.setSize(300,40);
+		cuenta.setForeground(Color.white);
+		cuenta.setLocation(140,100);
+		miCuenta.add(cuenta);
+		
+		JLabel nombre = new JLabel("Nombre:");
+		nombre.setFont(new Font("Comic Sans",Font.BOLD,18));
+		nombre.setSize(100,20);
+		nombre.setForeground(Color.white);
+		nombre.setLocation(70,190);
+		miCuenta.add(nombre);
+		
+		JTextField in_nombre = new JTextField();
+		in_nombre.setSize(340,30);
+		in_nombre.setLocation(70, 220);
+		in_nombre.setFont(new Font("Comic Sans", Font.ITALIC, 18));
+		miCuenta.add(in_nombre);
+		
+		JLabel apellidos = new JLabel("Apellidos:");
+		apellidos.setFont(new Font("Comic Sans",Font.BOLD,18));
+		apellidos.setSize(100,20);
+		apellidos.setForeground(Color.white);
+		apellidos.setLocation(70,260);
+		miCuenta.add(apellidos);
+		
+		JTextField in_apellidos = new JTextField();
+		in_apellidos.setSize(340,30);
+		in_apellidos.setLocation(70, 290);
+		in_apellidos.setFont(new Font("Comic Sans", Font.ITALIC, 18));
+		miCuenta.add(in_apellidos);
+		
+		JLabel email = new JLabel("Email:");
+		email.setFont(new Font("Comic Sans",Font.BOLD,18));
+		email.setSize(100,20);
+		email.setForeground(Color.white);
+		email.setLocation(70,320);
+		miCuenta.add(email);
+		
+		JTextField in_email = new JTextField();
+		in_email.setSize(340,30);
+		in_email.setLocation(70, 350);
+		in_email.setFont(new Font("Comic Sans", Font.ITALIC, 18));
+		miCuenta.add(in_email);
+		
+		JLabel contra = new JLabel("Contraseña:");
+		contra.setFont(new Font("Comic Sans",Font.BOLD,18));
+		contra.setSize(200,20);
+		contra.setForeground(Color.white);
+		contra.setLocation(70,380);
+		miCuenta.add(contra);
+		
+		JPasswordField pwd = new JPasswordField();
+		pwd.setSize(340,30);
+		pwd.setLocation(70,410);
+		miCuenta.add(pwd);
+		
+		JButton actualizar_datos = new JButton("Actualizar datos");
+		actualizar_datos.setSize(150,40);
+		actualizar_datos.setForeground(Color.white);
+		actualizar_datos.setLocation(270,460);
+		actualizar_datos.setOpaque(true);
+		actualizar_datos.setBackground(Color.decode("#080691"));
+		miCuenta.add(actualizar_datos);
+		
+		JButton cancelar = new JButton("Cancelar");
+		cancelar.setSize(150,40);
+		cancelar.setForeground(Color.white);
+		cancelar.setLocation(62,460);
+		cancelar.setOpaque(true);
+		cancelar.setBackground(Color.decode("#D80000"));
+		miCuenta.add(cancelar);
+		
+		return miCuenta;
 	}
 }
