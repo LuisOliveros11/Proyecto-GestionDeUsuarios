@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -363,6 +365,105 @@ public class Ventana extends JFrame {
 
 		listaUsuarios.add(jmb);
 
+		JLabel titulo = new JLabel("Lista de usuarios");
+		titulo.setSize(200, 40);
+		titulo.setLocation(150, 30);
+		titulo.setFont(new Font("Comic Sans", Font.BOLD, 23));
+		titulo.setForeground(Color.white);
+		listaUsuarios.add(titulo);
+
+		JLabel editar = new JLabel("Editar");
+		editar.setSize(100, 20);
+		editar.setLocation(20, 90);
+		editar.setFont(new Font("Comic Sans", Font.BOLD, 18));
+		editar.setForeground(Color.white);
+		listaUsuarios.add(editar);
+
+		JComboBox usuarios = new JComboBox();
+		usuarios.setSize(440, 40);
+		usuarios.setLocation(20, 120);
+		listaUsuarios.add(usuarios);
+		String[] datos = null;
+		BufferedReader reader;
+
+		try {
+			reader = new BufferedReader(new FileReader("Users.txt"));
+			String line = reader.readLine();
+			while (line != null) {
+				datos = line.split(",");
+				usuarios.addItem(datos[0]);
+				// Leer la siguiente linea
+				line = reader.readLine();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		JButton btn_editar = new JButton("Editar a " + usuarios.getSelectedItem().toString());
+		btn_editar.setSize(440, 40);
+		btn_editar.setLocation(20, 170);
+		btn_editar.setForeground(Color.white);
+		btn_editar.setOpaque(true);
+		btn_editar.setBackground(Color.decode("#D80000"));
+		listaUsuarios.add(btn_editar);
+
+		usuarios.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btn_editar.setText("Editar a " + usuarios.getSelectedItem().toString());
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
+
+		String nombresColumna[] = { "Usuario", "Nombre", "Acciones" };
+		String datosFila[][] = new String[100][3];
+		
+		try {
+			reader = new BufferedReader(new FileReader("Users.txt"));
+			String line = reader.readLine();
+			JTable tabla;
+
+			for (int i = 0; i < 100; i++) {
+				int j = 1;
+				if (line != null) {
+					datos = null;
+					datos = line.split(",");
+					for (int k = 0; k < 2; k++) {
+						datosFila[i][k] = datos[j];
+						j--;
+					}
+					line = reader.readLine();
+				} else {
+					i = 100;
+				}
+			}
+			tabla = new JTable(datosFila, nombresColumna);
+			JScrollPane sp = new JScrollPane(tabla);
+			sp.setSize(440, 300);
+			sp.setLocation(20, 220);
+			listaUsuarios.add(sp);
+			reader.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		return listaUsuarios;
 	}
 
@@ -470,6 +571,7 @@ public class Ventana extends JFrame {
 				newUser = newUser + in_Usuario.getText() + ",";
 				newUser = newUser + in_Email.getText() + ",";
 				String pwd = new String(in_Pwd.getPassword());
+				String conf_pwd = new String(confirmar_In_Pwd.getPassword());
 				newUser = newUser + pwd;
 
 				BufferedReader reader;
@@ -487,6 +589,10 @@ public class Ventana extends JFrame {
 						} else {
 							line = reader.readLine();
 						}
+					}
+					if (!pwd.equals(conf_pwd) && newUser != "") {
+						JOptionPane.showMessageDialog(null, "Error, las contraseñas no coinciden");
+						newUser = "";
 					}
 					if (newUser != "") {
 						FileWriter fw = new FileWriter("Users.txt", true);

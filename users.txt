@@ -1,1 +1,3 @@
 luis parada,lparada,luis@fake,12345
+oscar macias,oscar,oscar@fake,123
+kevin,kevin,kevin,125
