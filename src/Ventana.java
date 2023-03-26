@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,10 +18,11 @@ import javax.swing.*;
 public class Ventana extends JFrame {
 	private String actual = "login";
 	private String anterior = "login";
-	private String userNameActual = " ";
+	private String[] datos = null;
 	private JPanel gran_panel = null;
 	private JMenuBar jmb;
 
+	
 	// CONSTRUCTOR
 	public Ventana() {
 		this.setVisible(true);
@@ -69,10 +72,11 @@ public class Ventana extends JFrame {
 		login.setSize(500, 600);
 		login.setBackground(Color.black);
 		login.setLayout(null);
-		
+
 		ImageIcon img = new ImageIcon("ingresar.jpg");
 		JLabel logo = new JLabel();
-		logo.setBounds(190, 30, 120, 120);;
+		logo.setBounds(190, 30, 120, 120);
+		;
 		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
 		login.add(logo);
 
@@ -130,7 +134,6 @@ public class Ventana extends JFrame {
 				// TODO Auto-generated method stub
 				String usuario = userName.getText();
 				String password = new String(pwd.getPassword());
-				String[] datos = null;
 				BufferedReader reader;
 				Boolean acceso = false;
 				try {
@@ -141,14 +144,14 @@ public class Ventana extends JFrame {
 						if (datos[1].equals(usuario)) {
 							if (datos[3].equals(password)) {
 								acceso = true;
-								userNameActual = datos[0];
+								break;
 							}
 						}
 						// Leer la siguiente linea
 						line = reader.readLine();
 					}
 					if (acceso) {
-						JOptionPane.showMessageDialog(null, "Bienvenido " + userNameActual);
+						JOptionPane.showMessageDialog(null, "Bienvenido " + datos[0]);
 						anterior = actual;
 						actual = "dash";
 						route();
@@ -183,16 +186,17 @@ public class Ventana extends JFrame {
 		dash.setBackground(Color.black);
 		dash.setLayout(null);
 
-		JLabel bienvenido = new JLabel("Hola " + userNameActual, JLabel.CENTER);
+		JLabel bienvenido = new JLabel("Hola " + datos[0], JLabel.CENTER);
 		bienvenido.setFont(new Font("Comic Sans", Font.BOLD, 23));
 		bienvenido.setSize(500, 40);
 		bienvenido.setForeground(Color.white);
 		bienvenido.setLocation(0, 100);
 		dash.add(bienvenido);
-		
+
 		ImageIcon img = new ImageIcon("dash.jpg");
 		JLabel logo = new JLabel();
-		logo.setBounds(190, 160, 120, 120);;
+		logo.setBounds(190, 160, 120, 120);
+		;
 		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
 		dash.add(logo);
 
@@ -288,10 +292,11 @@ public class Ventana extends JFrame {
 		cuenta.setForeground(Color.white);
 		cuenta.setLocation(0, 25);
 		miCuenta.add(cuenta);
-		
+
 		ImageIcon img = new ImageIcon("dash.jpg");
 		JLabel logo = new JLabel();
-		logo.setBounds(200, 70, 100, 100);;
+		logo.setBounds(200, 70, 100, 100);
+		;
 		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
 		miCuenta.add(logo);
 
@@ -306,6 +311,7 @@ public class Ventana extends JFrame {
 		in_nombre.setSize(340, 30);
 		in_nombre.setLocation(70, 220);
 		in_nombre.setFont(new Font("Comic Sans", Font.ITALIC, 18));
+		in_nombre.setText(datos[0]);
 		miCuenta.add(in_nombre);
 
 		JLabel apellidos = new JLabel("Apellidos:");
@@ -332,6 +338,7 @@ public class Ventana extends JFrame {
 		in_email.setSize(340, 30);
 		in_email.setLocation(70, 350);
 		in_email.setFont(new Font("Comic Sans", Font.ITALIC, 18));
+		in_email.setText(datos[2]);
 		miCuenta.add(in_email);
 
 		JLabel contra = new JLabel("Contraseña:");
@@ -361,6 +368,81 @@ public class Ventana extends JFrame {
 		cancelar.setOpaque(true);
 		cancelar.setBackground(Color.decode("#D80000"));
 		miCuenta.add(cancelar);
+
+		actualizar_datos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				// SE GUARDAN LOS DATOS ORIGINALES
+
+				String[] datos_Orig = { datos[0], datos[1], datos[2], datos[3] };
+				// SE GUARDAN LOS DATOS ACTUALIZADOS EN UNA SOLA CADENA
+				String datos_Actualizados = "";
+				datos_Actualizados = datos_Actualizados + in_nombre.getText() + " ";
+				datos_Actualizados = datos_Actualizados + in_apellidos.getText() + ",";
+				datos_Actualizados = datos_Actualizados + datos[1] + ",";
+				datos_Actualizados = datos_Actualizados + in_email.getText() + ",";
+				String password = new String(pwd.getPassword());
+				datos_Actualizados = datos_Actualizados + password;
+				BufferedReader reader;
+				boolean usuarioDoble = false;
+				// MATRIZ PARA ALMACENAR LOS DATOS EXISTENTES EN EL TXT QUE DESPUES SERAN
+				// VACIADOS
+				String[][] copiaDatos = new String[100][1];
+				try {
+					reader = new BufferedReader(new FileReader("Users.txt"));
+					String line = reader.readLine();
+					while (line != null) {
+						String[] datos = null;
+						datos = line.split(",");
+						if (datos[2].equals(in_email.getText()) && !datos_Orig[2].equals(datos[2])) {
+							JOptionPane.showMessageDialog(null, "Error, ya hay un usuario registrado con este correo");
+							usuarioDoble = true;
+							break;
+						} else {
+							line = reader.readLine();
+						}
+					}
+					if (!in_nombre.getText().isEmpty() && !in_apellidos.getText().isEmpty()
+							&& !in_email.getText().isEmpty() && !password.isEmpty() && !usuarioDoble) {
+						// SE GUARDAN LOS DATOS EXISTENTES DEL TXT ANTES DE ELIMINARLOS
+						int i = 0;
+						reader = new BufferedReader(new FileReader("Users.txt"));
+						line = reader.readLine();
+						while (line != null) {
+							copiaDatos[i][0] = line;
+							line = reader.readLine();
+							i++;
+						}
+						i = 0;
+						// SE ELIMINAN LOS DATOS EXISTENTES EN EL TXT
+						BufferedWriter writter = new BufferedWriter(new FileWriter("Users.txt"));
+						// SE VUELVE A LLENAR EL TXT CON LOS DATOS GUARDADOS EN LA COPIA Y LOS
+						// ACTUALIZDOS
+						while (copiaDatos[i][0] != null) {
+							if (copiaDatos[i][0].contains(datos_Orig[2])) {
+								i++;
+							} else {
+								writter.write(copiaDatos[i][0]);
+								writter.newLine();
+								i++;
+							}
+						}
+						writter.write(datos_Actualizados);
+						writter.newLine();
+						writter.close();
+						datos = datos_Actualizados.split(",");
+						JOptionPane.showMessageDialog(null, "Información actualizada");
+					} else if (!usuarioDoble) {
+						JOptionPane.showMessageDialog(null, "Error, todos los campos deben ser llenados");
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 
 		cancelar.addActionListener(new ActionListener() {
 			@Override
@@ -402,7 +484,7 @@ public class Ventana extends JFrame {
 		usuarios.setSize(440, 40);
 		usuarios.setLocation(20, 120);
 		listaUsuarios.add(usuarios);
-		String[] datos = null;
+		datos = null;
 		BufferedReader reader;
 
 		try {
@@ -450,9 +532,36 @@ public class Ventana extends JFrame {
 			}
 		});
 
+		btn_editar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				BufferedReader reader;
+				try {
+					reader = new BufferedReader(new FileReader("Users.txt"));
+					String line = reader.readLine();
+					while (line != null) {
+						datos = null;
+						datos = line.split(",");
+						if (datos[0].equals(usuarios.getSelectedItem().toString())) {
+							break;
+						} else {
+							line = reader.readLine();
+						}
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				anterior = actual;
+				actual = "miCuenta";
+				route();
+			}
+		});
+
 		String nombresColumna[] = { "Usuario", "Nombre", "Acciones" };
 		String datosFila[][] = new String[100][3];
-		
+
 		try {
 			reader = new BufferedReader(new FileReader("Users.txt"));
 			String line = reader.readLine();
@@ -504,10 +613,11 @@ public class Ventana extends JFrame {
 
 		ImageIcon img = new ImageIcon("user.png");
 		JLabel logo = new JLabel();
-		logo.setBounds(200, 60, 90, 90);;
+		logo.setBounds(200, 60, 90, 90);
+		;
 		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH)));
 		crearUsuario.add(logo);
-		
+
 		JLabel nombre = new JLabel("Nombre:");
 		nombre.setSize(100, 20);
 		nombre.setLocation(20, 150);
@@ -608,7 +718,7 @@ public class Ventana extends JFrame {
 						String[] datos = null;
 						datos = line.split(",");
 						if (datos[2].equals(in_Email.getText()) || datos[1].equals(in_Usuario.getText())) {
-							JOptionPane.showMessageDialog(null, "El usuario no se ha podido crear");
+							JOptionPane.showMessageDialog(null, "Error, ya hay un usuario registrado con este correo");
 							newUser = "";
 							break;
 						} else {
@@ -619,8 +729,8 @@ public class Ventana extends JFrame {
 						JOptionPane.showMessageDialog(null, "Error, las contraseñas no coinciden");
 						newUser = "";
 					}
-					if (newUser != "" && !in_Nombre.getText().isEmpty() && !in_Usuario.getText().isEmpty() &&
-						!in_Email.getText().isEmpty() && !pwd.isEmpty() && !conf_pwd.isEmpty()) {
+					if (newUser != "" && !in_Nombre.getText().isEmpty() && !in_Usuario.getText().isEmpty()
+							&& !in_Email.getText().isEmpty() && !pwd.isEmpty() && !conf_pwd.isEmpty()) {
 						FileWriter fw = new FileWriter("Users.txt", true);
 						PrintWriter writer = new PrintWriter(fw);
 						writer.println(newUser);
@@ -630,7 +740,7 @@ public class Ventana extends JFrame {
 						anterior = actual;
 						actual = "miCuenta";
 						route();
-					}else if(newUser!=""){
+					} else if (newUser != "") {
 						JOptionPane.showMessageDialog(null, "Error, todos los campos deben ser llenados");
 					}
 				} catch (IOException e1) {
@@ -668,10 +778,11 @@ public class Ventana extends JFrame {
 		titulo.setFont(new Font("Comic Sans", Font.BOLD, 23));
 		titulo.setForeground(Color.white);
 		comoCrearUsuario.add(titulo);
-		
+
 		ImageIcon img = new ImageIcon("Crearuser.jpg");
 		JLabel logo = new JLabel();
-		logo.setBounds(200, 80, 90, 90);;
+		logo.setBounds(200, 80, 90, 90);
+		;
 		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH)));
 		comoCrearUsuario.add(logo);
 
