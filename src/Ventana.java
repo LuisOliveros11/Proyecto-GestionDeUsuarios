@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -68,24 +69,30 @@ public class Ventana extends JFrame {
 		login.setSize(500, 600);
 		login.setBackground(Color.black);
 		login.setLayout(null);
+		
+		ImageIcon img = new ImageIcon("ingresar.jpg");
+		JLabel logo = new JLabel();
+		logo.setBounds(190, 30, 120, 120);;
+		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
+		login.add(logo);
 
 		JLabel tag1 = new JLabel("Accede a tu cuenta", JLabel.CENTER);
 		tag1.setFont(new Font("Comic Sans", Font.BOLD, 23));
 		tag1.setSize(300, 40);
 		tag1.setForeground(Color.white);
-		tag1.setLocation(100, 100);
+		tag1.setLocation(100, 160);
 		login.add(tag1);
 
 		JLabel tag2 = new JLabel("Nombre de usuario");
 		tag2.setFont(new Font("Arial", Font.BOLD, 15));
 		tag2.setSize(200, 20);
 		tag2.setForeground(Color.white);
-		tag2.setLocation(50, 190);
+		tag2.setLocation(50, 250);
 		login.add(tag2);
 
 		JTextField userName = new JTextField();
 		userName.setSize(380, 50);
-		userName.setLocation(50, 220);
+		userName.setLocation(50, 280);
 		userName.setFont(new Font("Comic Sans", Font.ITALIC, 15));
 		login.add(userName);
 
@@ -93,18 +100,18 @@ public class Ventana extends JFrame {
 		tag3.setFont(new Font("Arial", Font.BOLD, 15));
 		tag3.setSize(200, 20);
 		tag3.setForeground(Color.white);
-		tag3.setLocation(50, 290);
+		tag3.setLocation(50, 350);
 		login.add(tag3);
 
 		JPasswordField pwd = new JPasswordField();
 		pwd.setSize(380, 50);
-		pwd.setLocation(48, 320);
+		pwd.setLocation(48, 380);
 		login.add(pwd);
 
 		JButton iniciar_Sesion = new JButton("Iniciar sesión");
 		iniciar_Sesion.setSize(150, 40);
 		iniciar_Sesion.setForeground(Color.white);
-		iniciar_Sesion.setLocation(270, 420);
+		iniciar_Sesion.setLocation(270, 480);
 		iniciar_Sesion.setOpaque(true);
 		iniciar_Sesion.setBackground(Color.decode("#080691"));
 		login.add(iniciar_Sesion);
@@ -112,7 +119,7 @@ public class Ventana extends JFrame {
 		JButton cancelar = new JButton("Cancelar");
 		cancelar.setSize(150, 40);
 		cancelar.setForeground(Color.white);
-		cancelar.setLocation(62, 420);
+		cancelar.setLocation(62, 480);
 		cancelar.setOpaque(true);
 		cancelar.setBackground(Color.decode("#D80000"));
 		login.add(cancelar);
@@ -176,12 +183,18 @@ public class Ventana extends JFrame {
 		dash.setBackground(Color.black);
 		dash.setLayout(null);
 
-		JLabel bienvenido = new JLabel("Hola " + userNameActual);
+		JLabel bienvenido = new JLabel("Hola " + userNameActual, JLabel.CENTER);
 		bienvenido.setFont(new Font("Comic Sans", Font.BOLD, 23));
-		bienvenido.setSize(300, 40);
+		bienvenido.setSize(500, 40);
 		bienvenido.setForeground(Color.white);
-		bienvenido.setLocation(150, 100);
+		bienvenido.setLocation(0, 100);
 		dash.add(bienvenido);
+		
+		ImageIcon img = new ImageIcon("dash.jpg");
+		JLabel logo = new JLabel();
+		logo.setBounds(190, 160, 120, 120);;
+		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH)));
+		dash.add(logo);
 
 		jmb = new JMenuBar();
 		jmb.setLocation(0, 0);
@@ -269,12 +282,18 @@ public class Ventana extends JFrame {
 
 		miCuenta.add(jmb);
 
-		JLabel cuenta = new JLabel("Mi cuenta personal");
+		JLabel cuenta = new JLabel("Mi cuenta personal", JLabel.CENTER);
 		cuenta.setFont(new Font("Comic Sans", Font.BOLD, 23));
-		cuenta.setSize(300, 40);
+		cuenta.setSize(500, 20);
 		cuenta.setForeground(Color.white);
-		cuenta.setLocation(140, 100);
+		cuenta.setLocation(0, 25);
 		miCuenta.add(cuenta);
+		
+		ImageIcon img = new ImageIcon("dash.jpg");
+		JLabel logo = new JLabel();
+		logo.setBounds(200, 70, 100, 100);;
+		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+		miCuenta.add(logo);
 
 		JLabel nombre = new JLabel("Nombre:");
 		nombre.setFont(new Font("Comic Sans", Font.BOLD, 18));
@@ -476,13 +495,19 @@ public class Ventana extends JFrame {
 
 		crearUsuario.add(jmb);
 
-		JLabel titulo = new JLabel("Crear Usuario");
-		titulo.setSize(200, 40);
-		titulo.setLocation(170, 30);
+		JLabel titulo = new JLabel("Crear Usuario", JLabel.CENTER);
+		titulo.setSize(500, 20);
+		titulo.setLocation(0, 25);
 		titulo.setFont(new Font("Comic Sans", Font.BOLD, 23));
 		titulo.setForeground(Color.white);
 		crearUsuario.add(titulo);
 
+		ImageIcon img = new ImageIcon("user.png");
+		JLabel logo = new JLabel();
+		logo.setBounds(200, 60, 90, 90);;
+		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH)));
+		crearUsuario.add(logo);
+		
 		JLabel nombre = new JLabel("Nombre:");
 		nombre.setSize(100, 20);
 		nombre.setLocation(20, 150);
@@ -594,7 +619,8 @@ public class Ventana extends JFrame {
 						JOptionPane.showMessageDialog(null, "Error, las contraseñas no coinciden");
 						newUser = "";
 					}
-					if (newUser != "") {
+					if (newUser != "" && !in_Nombre.getText().isEmpty() && !in_Usuario.getText().isEmpty() &&
+						!in_Email.getText().isEmpty() && !pwd.isEmpty() && !conf_pwd.isEmpty()) {
 						FileWriter fw = new FileWriter("Users.txt", true);
 						PrintWriter writer = new PrintWriter(fw);
 						writer.println(newUser);
@@ -604,6 +630,8 @@ public class Ventana extends JFrame {
 						anterior = actual;
 						actual = "miCuenta";
 						route();
+					}else if(newUser!=""){
+						JOptionPane.showMessageDialog(null, "Error, todos los campos deben ser llenados");
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -634,12 +662,18 @@ public class Ventana extends JFrame {
 
 		comoCrearUsuario.add(jmb);
 
-		JLabel titulo = new JLabel("¿Como crear un usuario?");
-		titulo.setSize(300, 40);
-		titulo.setLocation(100, 30);
+		JLabel titulo = new JLabel("¿Como crear un usuario?", JLabel.CENTER);
+		titulo.setSize(500, 40);
+		titulo.setLocation(0, 30);
 		titulo.setFont(new Font("Comic Sans", Font.BOLD, 23));
 		titulo.setForeground(Color.white);
 		comoCrearUsuario.add(titulo);
+		
+		ImageIcon img = new ImageIcon("Crearuser.jpg");
+		JLabel logo = new JLabel();
+		logo.setBounds(200, 80, 90, 90);;
+		logo.setIcon(new ImageIcon(img.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH)));
+		comoCrearUsuario.add(logo);
 
 		JLabel paso1 = new JLabel("1.- Hacer click en la opción ''Usuarios'' en el menu");
 		paso1.setSize(500, 20);
