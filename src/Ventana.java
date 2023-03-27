@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class Ventana extends JFrame {
 	private String actual = "login";
@@ -179,7 +180,7 @@ public class Ventana extends JFrame {
 	}
 
 	public JPanel dash() {
-
+		
 		JPanel dash = new JPanel();
 		dash.setVisible(true);
 		dash.setSize(500, 600);
@@ -560,28 +561,35 @@ public class Ventana extends JFrame {
 		});
 
 		String nombresColumna[] = { "Usuario", "Nombre", "Acciones" };
-		String datosFila[][] = new String[100][3];
-
+		JButton eliminar = new JButton("Eliminar");
+		
 		try {
 			reader = new BufferedReader(new FileReader("Users.txt"));
 			String line = reader.readLine();
-			JTable tabla;
+			JTable tabla = new JTable();;
+			DefaultTableModel tablaModel = new DefaultTableModel() {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+			};
+			tablaModel.setColumnIdentifiers(nombresColumna);
 
 			for (int i = 0; i < 100; i++) {
-				int j = 1;
 				if (line != null) {
 					datos = null;
 					datos = line.split(",");
-					for (int k = 0; k < 2; k++) {
-						datosFila[i][k] = datos[j];
-						j--;
-					}
+					tablaModel.addRow(new Object[] {datos[1], datos[0], eliminar});
 					line = reader.readLine();
 				} else {
 					i = 100;
 				}
 			}
-			tabla = new JTable(datosFila, nombresColumna);
+			
+			tabla.setRowHeight(25);
+			tabla.setDefaultRenderer(Object.class, new BotonTabla());
+			tabla.setModel(tablaModel);
 			JScrollPane sp = new JScrollPane(tabla);
 			sp.setSize(440, 300);
 			sp.setLocation(20, 220);
@@ -591,7 +599,14 @@ public class Ventana extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		
+		eliminar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("aaaaaa");
+			}
+		});
 		return listaUsuarios;
 	}
 
@@ -735,6 +750,10 @@ public class Ventana extends JFrame {
 						PrintWriter writer = new PrintWriter(fw);
 						writer.println(newUser);
 						JOptionPane.showMessageDialog(null, "Usuario creado");
+						datos[0] = in_Nombre.getText();
+						datos[1] = in_Usuario.getText();
+						datos[2] = in_Email.getText();
+						datos[3] = pwd;
 						writer.close();
 						fw.close();
 						anterior = actual;
@@ -763,6 +782,7 @@ public class Ventana extends JFrame {
 		return crearUsuario;
 	}
 
+	
 	public JPanel comoCrearUsuario() {
 		JPanel comoCrearUsuario = new JPanel();
 		comoCrearUsuario.setVisible(true);
