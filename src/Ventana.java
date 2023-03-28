@@ -18,12 +18,10 @@ import javax.swing.table.DefaultTableModel;
 
 public class Ventana extends JFrame {
 	private String actual = "login";
-	private String anterior = "login";
 	private String[] datos = null;
 	private JPanel gran_panel = null;
 	private JMenuBar jmb;
 
-	
 	// CONSTRUCTOR
 	public Ventana() {
 		this.setVisible(true);
@@ -153,7 +151,6 @@ public class Ventana extends JFrame {
 					}
 					if (acceso) {
 						JOptionPane.showMessageDialog(null, "Bienvenido " + datos[0]);
-						anterior = actual;
 						actual = "dash";
 						route();
 					} else {
@@ -180,7 +177,7 @@ public class Ventana extends JFrame {
 	}
 
 	public JPanel dash() {
-		
+
 		JPanel dash = new JPanel();
 		dash.setVisible(true);
 		dash.setSize(500, 600);
@@ -229,7 +226,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "miCuenta";
 				route();
 			}
@@ -239,7 +235,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "login";
 				route();
 			}
@@ -249,7 +244,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "listaUsuarios";
 				route();
 			}
@@ -259,7 +253,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "crearUsuario";
 				route();
 			}
@@ -269,7 +262,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "comoCrearUsuario";
 				route();
 			}
@@ -434,6 +426,8 @@ public class Ventana extends JFrame {
 						writter.close();
 						datos = datos_Actualizados.split(",");
 						JOptionPane.showMessageDialog(null, "Información actualizada");
+						actual = "dash";
+						route();
 					} else if (!usuarioDoble) {
 						JOptionPane.showMessageDialog(null, "Error, todos los campos deben ser llenados");
 					}
@@ -449,7 +443,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "dash";
 				route();
 			}
@@ -554,7 +547,6 @@ public class Ventana extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				anterior = actual;
 				actual = "miCuenta";
 				route();
 			}
@@ -562,11 +554,12 @@ public class Ventana extends JFrame {
 
 		String nombresColumna[] = { "Usuario", "Nombre", "Acciones" };
 		JButton eliminar = new JButton("Eliminar");
-		
+
 		try {
 			reader = new BufferedReader(new FileReader("Users.txt"));
 			String line = reader.readLine();
-			JTable tabla = new JTable();;
+			JTable tabla = new JTable();
+			;
 			DefaultTableModel tablaModel = new DefaultTableModel() {
 				@Override
 				public boolean isCellEditable(int row, int column) {
@@ -576,15 +569,11 @@ public class Ventana extends JFrame {
 			};
 			tablaModel.setColumnIdentifiers(nombresColumna);
 
-			for (int i = 0; i < 100; i++) {
-				if (line != null) {
-					datos = null;
-					datos = line.split(",");
-					tablaModel.addRow(new Object[] {datos[1], datos[0], eliminar});
-					line = reader.readLine();
-				} else {
-					i = 100;
-				}
+			while (line != null) {
+				datos = null;
+				datos = line.split(",");
+				tablaModel.addRow(new Object[] { datos[1], datos[0], eliminar});
+				line = reader.readLine();
 			}
 			
 			tabla.setRowHeight(25);
@@ -599,14 +588,7 @@ public class Ventana extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		eliminar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("aaaaaa");
-			}
-		});
+
 		return listaUsuarios;
 	}
 
@@ -756,7 +738,6 @@ public class Ventana extends JFrame {
 						datos[3] = pwd;
 						writer.close();
 						fw.close();
-						anterior = actual;
 						actual = "miCuenta";
 						route();
 					} else if (newUser != "") {
@@ -773,7 +754,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "dash";
 				route();
 			}
@@ -782,7 +762,6 @@ public class Ventana extends JFrame {
 		return crearUsuario;
 	}
 
-	
 	public JPanel comoCrearUsuario() {
 		JPanel comoCrearUsuario = new JPanel();
 		comoCrearUsuario.setVisible(true);
@@ -888,7 +867,6 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				anterior = actual;
 				actual = "crearUsuario";
 				route();
 			}
